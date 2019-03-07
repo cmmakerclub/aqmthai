@@ -21,6 +21,7 @@
     "influx": "^5.0.7",
     "inquirer": "^5.2.0",
     "keymirror": "^0.1.1",
+    "lodash": "^4.17.11",
     "moment-timezone": "^0.5.14",
     "node-fetch": "^2.1.2",
     "progress": "^2.0.0",
