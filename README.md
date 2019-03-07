@@ -1,5 +1,7 @@
 # aqmthai.js
 
+a non-official aqmthai.com's public report to influxdb importer.
+
 ```
 $ aqmthai -h
 Usage: aqmthai [options]
