@@ -1,6 +1,6 @@
 {
   "name": "aqmthai.js",
-  "version": "1.0.14",
+  "version": "1.0.18",
   "description": "a non-official aqmthai.com's public report to influxdb importer.",
   "main": "src/index.js",
   "bin": {
@@ -9,17 +9,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "air quality",
+    "aqmthai.com"
+  ],
+  "author": "Nat Weerawan",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^2.4.1",
     "clear": "^0.1.0",
     "commander": "^2.15.1",
-    "configstore": "^3.1.2",
+    "configstore": "^4.0.0",
     "figlet": "^1.2.0",
     "form-data": "^2.3.2",
     "influx": "^5.0.7",
-    "inquirer": "^5.2.0",
+    "inquirer": "^6.2.2",
     "keymirror": "^0.1.1",
     "lodash": "^4.17.11",
     "moment-timezone": "^0.5.14",
@@ -27,5 +31,9 @@
     "progress": "^2.0.0",
     "promise-sequential": "^1.1.1",
     "xml-parser": "^1.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmmakerclub/aqmthai.js"
   }
 }

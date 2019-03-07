@@ -1,7 +1,7 @@
 const {createDispatcher} = require('./utils')
 const createInsertDbDispatcher = ({insertDbDelayMs, influx, influxDbName, influxDbMeasurement, bar, process}) => {
   const bucket = []
-  return createDispatcher({refBucket: bucket, intervalTimeMs: insertDbDelayMs}, {
+  return createDispatcher({refBucket: bucket, intervalTimeMs: insertDbDelayMs, influx}, {
     pass: row => Object.keys(row.data).length > 0,
     fn: (row, ct, total) => {
       const point = Object.assign({}, row.data)
