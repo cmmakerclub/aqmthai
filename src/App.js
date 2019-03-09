@@ -6,7 +6,7 @@ const {createInsertDbDispatcher} = require('./Dispatchers')
 
 const {inquirerAppConfigs, showStationsCheckbox} = require('./Questions')
 const sequential = require('promise-sequential')
-const {configStore, get} = require('./utils')
+const {configStore, get, reloadConfig} = require('./utils')
 
 let sct = 0
 const log = (...args) => bar.interrupt(...args)
@@ -17,14 +17,16 @@ const bar = new ProgressBar('[job=:jobId] inserting station=:station (:a/:b) [:b
   total: 100
 })
 
-let influxHost = configStore.get(Constants.INFLUX_HOST) || process.env.INFLUX_HOST || 'localhost'
-let influxPort = configStore.get(Constants.INFLUX_PORT) || process.env.INFLUX_PORT || 8086
-let influxUsername = configStore.get(Constants.INFLUX_USERNAME) || process.env.INFLUX_USERNAME || 'admin'
-let influxPassword = configStore.get(Constants.INFLUX_PASSWORD) || process.env.INFLUX_PASSWORD || 'admin'
-let influxDbName = configStore.get(Constants.INFLUX_DB_NAME) || process.env.INFUX_DBNAME || "db1"
-let influxDbMeasurement = process.env.INFUX_MEASUREMENT || 'aqm'
-let insertDbDelayMs = configStore.get(Constants.INSERT_DELAY_MS) || process.env.INSERT_DELAY_MS || 25
-let influx
+let {
+  influxHost,
+  influxPort,
+  influxUsername,
+  influxPassword,
+  influxDbName,
+  influxDbMeasurement,
+  insertDbDelayMs,
+  influx
+} = reloadConfig()
 
 const start = () => {
   inquirerAppConfigs().then(answers => {
@@ -34,16 +36,26 @@ const start = () => {
     configStore.set(Constants.END_DATE, endDate)
     configStore.set(Constants.START_DATE, startDate)
 
-    let insertDbDispatcher = createInsertDbDispatcher({
-      insertDbDelayMs, influx,
-      influxDbMeasurement, influxDbName, bar, process
-    })
+    let {
+      influxHost,
+      influxPort,
+      influxUsername,
+      influxPassword,
+      influxDbName,
+      influxDbMeasurement,
+      insertDbDelayMs,
+    } = reloadConfig()
 
     influx = new Influx.InfluxDB({
       hosts: [{host: influxHost, port: influxPort}],
       username: influxUsername,
       password: influxPassword,
       database: influxDbName
+    })
+
+    let insertDbDispatcher = createInsertDbDispatcher({
+      insertDbDelayMs, influx,
+      influxDbMeasurement, influxDbName, bar, process
     })
 
     influx.getDatabaseNames().then(names => {

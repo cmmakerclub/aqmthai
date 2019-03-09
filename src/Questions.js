@@ -1,20 +1,23 @@
 const moment = require('moment-timezone')
 const inquirer = require('inquirer')
+const stations = require('./stationsDb')
+const {reloadConfig} = require('./utils')
 const {configStore} = require('./utils')
 const Constants = require('./Constants')
-const stations = require('./stationsDb')
-
-let influxHost = configStore.get(Constants.INFLUX_HOST) || process.env.INFLUX_HOST || 'localhost'
-let influxPort = configStore.get(Constants.INFLUX_PORT) || process.env.INFLUX_PORT || 8086
-let influxUsername = configStore.get(Constants.INFLUX_USERNAME) || process.env.INFLUX_USERNAME || 'admin'
-let influxPassword = configStore.get(Constants.INFLUX_PASSWORD) || process.env.INFLUX_PASSWORD || 'admin'
-let influxDbName = configStore.get(Constants.INFLUX_DB_NAME) || process.env.INFUX_DBNAME || "db1"
-let influxDbMeasurement = process.env.INFUX_MEASUREMENT || 'aqm'
-let insertDbDelayMs = configStore.get(Constants.INSERT_DELAY_MS) || process.env.INSERT_DELAY_MS || 25
+let {
+  influxHost,
+  influxPort,
+  influxUsername,
+  influxPassword,
+  influxDbName,
+  influxDbMeasurement,
+  insertDbDelayMs,
+} = reloadConfig()
 
 const showStationsCheckbox = () => {
   const qText = 'choose stations'
   const prevSelectedStations = configStore.get(Constants.PREV_SELECTED_STATIONS) || []
+
 
   let questions = [{
     name: qText,

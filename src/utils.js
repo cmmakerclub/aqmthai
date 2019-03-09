@@ -8,6 +8,7 @@ const FormData = require('form-data')
 const parse = require('xml-parser')
 const Configstore = require('configstore')
 const stations = require('./stationsDb')
+const Constants = require('./Constants')
 
 const createDispatcher = ({refBucket, intervalTimeMs}, {pass, fn, finishFn}) => {
   let intervalId
@@ -117,7 +118,25 @@ const get = (params) => {
   })
 }
 
+const reloadConfig = () => {
+  let influxHost = configStore.get(Constants.INFLUX_HOST) || process.env.INFLUX_HOST || 'localhost'
+  let influxPort = configStore.get(Constants.INFLUX_PORT) || process.env.INFLUX_PORT || 8086
+  let influxUsername = configStore.get(Constants.INFLUX_USERNAME) || process.env.INFLUX_USERNAME || 'admin'
+  let influxPassword = configStore.get(Constants.INFLUX_PASSWORD) || process.env.INFLUX_PASSWORD || 'admin'
+  let influxDbName = configStore.get(Constants.INFLUX_DB_NAME) || process.env.INFUX_DBNAME || "db1"
+  let influxDbMeasurement = process.env.INFUX_MEASUREMENT || 'aqm'
+  let insertDbDelayMs = configStore.get(Constants.INSERT_DELAY_MS) || process.env.INSERT_DELAY_MS || 25
+  return {
+    influxHost,
+    influxPort,
+    influxUsername,
+    influxPassword,
+    influxDbName,
+    influxDbMeasurement,
+    insertDbDelayMs
+  }
+}
 module.exports = {
-  createDispatcher, showFiglet, configStore, get
+  createDispatcher, showFiglet, configStore, get, reloadConfig
 }
 
